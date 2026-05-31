@@ -6,10 +6,10 @@ if(CONFIG_ZMK_OLED_GIF)
     target_sources(app PRIVATE src/behaviors/behavior_oled_gif_cycle.c)
     target_sources(app PRIVATE src/behaviors/gif_renderer.c)
 
-    if(CONFIG_ZMK_OLED_GIF_BONGO_CAT)
+    #if(CONFIG_ZMK_OLED_GIF_BONGO_CAT)
         target_sources(app PRIVATE src/gifs/bongo_cat.c)
         target_sources(app PRIVATE src/gifs/test2.c)
-    endif()
+    #endif()
 
     zephyr_include_directories(include)
 endif()
