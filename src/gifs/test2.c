@@ -1,3 +1,4 @@
+#include <zephyr/sys/util.h>     // ARRAY_SIZE
 #include <zmk_oled_gif/gif.h>
 
 // 512 bytes each for 128x32, MONO01 format

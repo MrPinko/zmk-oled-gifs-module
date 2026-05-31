@@ -6,6 +6,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <zephyr/sys/util.h>
 #include <zephyr/sys/iterable_sections.h>
 
 /**
