@@ -10,9 +10,9 @@
 #include <zephyr/sys/dlist.h>
 #include <zephyr/kernel.h>
 #include <zephyr/drivers/display.h>
+#include <zephyr/sys/iterable_sections.h>
 
 #include <drivers/behavior.h>
-
 #include <zmk/behavior.h>
 #include <zmk/event_manager.h>
 #include <zmk/events/position_state_changed.h>
