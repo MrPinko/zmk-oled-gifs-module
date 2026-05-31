@@ -7,8 +7,8 @@
 
 #include <zephyr/device.h>
 #include <zephyr/logging/log.h>
-#include <drivers/behavior.h>
 #include <zmk/behavior.h>
+#include <drivers/behavior.h>
 
 /*
  * The renderer (and the public API it exposes) is only compiled on halves
