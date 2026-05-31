@@ -20,6 +20,7 @@
 #include <zmk/matrix.h>
 #include <zmk/keymap.h>
 
+#include <zmk_oled_gif/gif.h>
 
 LOG_MODULE_REGISTER(zmk_oled_gif, CONFIG_ZMK_LOG_LEVEL);
 
@@ -149,7 +150,22 @@ static int gif_renderer_init(void)
         return 0;  /* no GIFs yet, nothing to start */
     }
 
-    const struct zmk_oled_gif *gif = gif_get(0);
+    const struct zmk_oled_gif *gif = #include <stdlib.h>
+
+#include <zephyr/device.h>
+#include <zephyr/logging/log.h>
+#include <zephyr/sys/dlist.h>
+#include <zephyr/kernel.h>
+
+#include <drivers/behavior.h>
+
+#include <zmk/behavior.h>
+#include <zmk/event_manager.h>
+#include <zmk/events/position_state_changed.h>
+#include <zmk/events/keycode_state_changed.h>
+#include <zmk/hid.h>
+#include <zmk/matrix.h>
+#include <zmk/keymap.h>(0);
     if (!gif) return -ENODEV;
 
     render_frame(gif, 0);
