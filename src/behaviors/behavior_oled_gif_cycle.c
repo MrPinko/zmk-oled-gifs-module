@@ -5,10 +5,22 @@
 
 #define DT_DRV_COMPAT zmk_behavior_oled_gif_cycle
 
+#include <stdlib.h>
+
 #include <zephyr/device.h>
 #include <zephyr/logging/log.h>
-#include <zmk/behavior.h>
+#include <zephyr/sys/dlist.h>
+#include <zephyr/kernel.h>
+
 #include <drivers/behavior.h>
+
+#include <zmk/behavior.h>
+#include <zmk/event_manager.h>
+#include <zmk/events/position_state_changed.h>
+#include <zmk/events/keycode_state_changed.h>
+#include <zmk/hid.h>
+#include <zmk/matrix.h>
+#include <zmk/keymap.h>
 
 /*
  * The renderer (and the public API it exposes) is only compiled on halves
