@@ -3,12 +3,23 @@
  * SPDX-License-Identifier: MIT
  */
 
-#include <zephyr/kernel.h>
+#include <stdlib.h>
+
 #include <zephyr/device.h>
-#include <zephyr/drivers/display.h>
 #include <zephyr/logging/log.h>
-#include <zephyr/sys/iterable_sections.h>
-#include <zmk_oled_gif/gif.h>
+#include <zephyr/sys/dlist.h>
+#include <zephyr/kernel.h>
+
+#include <drivers/behavior.h>
+
+#include <zmk/behavior.h>
+#include <zmk/event_manager.h>
+#include <zmk/events/position_state_changed.h>
+#include <zmk/events/keycode_state_changed.h>
+#include <zmk/hid.h>
+#include <zmk/matrix.h>
+#include <zmk/keymap.h>
+
 
 LOG_MODULE_REGISTER(zmk_oled_gif, CONFIG_ZMK_LOG_LEVEL);
 
