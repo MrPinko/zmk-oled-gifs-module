@@ -13,7 +13,7 @@ static const uint8_t frame_01[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x
 
 static const uint8_t *frames[] = { frame_00, frame_01 };
 
-ZMK_OLED_GIF_DEFINE(my_animation, {
+ZMK_OLED_GIF_DEFINE(bongo_cat_animation, {
     .frames         = frames,
     .frame_count    = ARRAY_SIZE(frames),
     .frame_delay_ms = 100,       // 10 fps
