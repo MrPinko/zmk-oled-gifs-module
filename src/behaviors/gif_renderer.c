@@ -9,6 +9,7 @@
 #include <zephyr/logging/log.h>
 #include <zephyr/sys/dlist.h>
 #include <zephyr/kernel.h>
+#include <zephyr/drivers/display.h>
 
 #include <drivers/behavior.h>
 
@@ -19,6 +20,7 @@
 #include <zmk/hid.h>
 #include <zmk/matrix.h>
 #include <zmk/keymap.h>
+
 
 #include <zmk_oled_gif/gif.h>
 
