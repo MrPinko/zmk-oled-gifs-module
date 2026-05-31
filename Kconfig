@@ -1,0 +1,19 @@
+# Copyright (c) 2024 The ZMK Contributors
+# SPDX-License-Identifier: MIT
+
+config ZMK_OLED_GIF
+    bool "ZMK OLED GIF animation"
+    default y
+    depends on DT_HAS_ZMK_BEHAVIOR_OLED_GIF_CYCLE_ENABLED
+    depends on ZMK_DISPLAY
+    help
+      Enable GIF frame animation on OLED displays.
+      Register animations using ZMK_OLED_GIF_DEFINE() and cycle
+      through them with the &gif_cyc keymap behavior.
+
+      NOTE: disable ZMK's built-in display widgets in your .conf
+      to avoid conflicts with direct display writes:
+        CONFIG_ZMK_WIDGET_BATTERY_STATUS=n
+        CONFIG_ZMK_WIDGET_OUTPUT_STATUS=n
+        CONFIG_ZMK_WIDGET_LAYER_STATUS=n
+        CONFIG_ZMK_WIDGET_WPM_STATUS=n
