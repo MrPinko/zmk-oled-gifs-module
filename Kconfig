@@ -3,9 +3,7 @@
 
 config ZMK_OLED_GIF
     bool "ZMK OLED GIF animation"
-    default y
-    depends on DT_HAS_ZMK_BEHAVIOR_OLED_GIF_CYCLE_ENABLED
-    depends on ZMK_DISPLAY
+    default n
     help
       Enable GIF frame animation on OLED displays.
       Register animations using ZMK_OLED_GIF_DEFINE() and cycle
