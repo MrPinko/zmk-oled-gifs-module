@@ -1,1 +1,0 @@
-ITERABLE_SECTION_ROM(zmk_oled_gif, 4)
