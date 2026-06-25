@@ -1,2 +1,1 @@
-config SHIELD_OLED_GIFS
-    def_bool $(shields_list_contains,oled_gifs)
+def_bool $(shields_list_contains,oled_gifs)

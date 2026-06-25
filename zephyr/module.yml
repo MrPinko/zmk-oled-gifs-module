@@ -1,7 +1,7 @@
 name: zmk-oled-gifs
 build:
-  cmake-ext: true
-  kconfig-ext: true
+  cmake: .
+  kconfig: Kconfig
   settings:
     board_root: .
 

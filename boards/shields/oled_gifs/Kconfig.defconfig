@@ -1,6 +1,2 @@
-if SHIELD_OLED_GIFS
-
 config OLED_GIFS
     default y
-
-endif # SHIELD_OLED_GIFS
