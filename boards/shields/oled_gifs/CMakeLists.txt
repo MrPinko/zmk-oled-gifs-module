@@ -1,30 +1,27 @@
-cmake_minimum_required(VERSION 3.20.0)
+if(CONFIG_ZMK_DISPLAY)
 
-if(CONFIG_OLED_GIFS)
+    zephyr_library()
+    file(GLOB font_sources src/fonts/*.c)
+    zephyr_library_include_directories(${ZEPHYR_LVGL_MODULE_DIR})
+    zephyr_library_include_directories(${ZEPHYR_BASE}/lib/gui/lvgl/)
+    zephyr_library_include_directories(${ZEPHYR_BASE}/drivers)
+    zephyr_library_include_directories(${CMAKE_SOURCE_DIR}/include)
+    zephyr_library_include_directories(${ZEPHYR_CURRENT_MODULE_DIR}/include)
+    zephyr_library_include_directories(${ZEPHYR_CURRENT_CMAKE_DIR}/include)
+    zephyr_library_include_directories(include)
+    zephyr_library_sources(${font_sources})
 
-  # Core animation driver (always needed when the feature is on)
-  target_sources(app PRIVATE
-    ${CMAKE_CURRENT_LIST_DIR}/src/oled_gifs.c
-  )
 
-  target_include_directories(app PRIVATE
-    ${CMAKE_CURRENT_LIST_DIR}/include
-  )
+    zephyr_library_sources(custom_status_screen.c)
+    zephyr_library_sources(assets/images.c)
 
-  # ── per-GIF frame data ────────────────────────────────────────────────────
-  # Each GIF lives in its own .c file so only selected ones are compiled.
+    zephyr_library_sources(widgets/battery.c)
+    zephyr_library_sources(widgets/output.c)
+    zephyr_library_sources(widgets/util.c)
 
-  if(CONFIG_OLED_GIF_BLINK)
-    target_sources(app PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/src/gifs/blink.c
-    )
-  endif()
 
-  # Add more blocks here as you add GIFs:
-  # if(CONFIG_OLED_GIF_CAT)
-  #   target_sources(app PRIVATE
-  #     ${CMAKE_CURRENT_LIST_DIR}/src/gifs/cat.c
-  #   )
-  # endif()
-
+    target_sources_ifdef(CONFIG_NICE_OLED_WIDGET_ANIMATION_PERIPHERAL_CAT app PRIVATE assets/cat.c)
+    
+    zephyr_library_sources(widgets/animation.c)
+    zephyr_library_sources(widgets/screen_peripheral.c)
 endif()

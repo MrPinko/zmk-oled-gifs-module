@@ -1,4 +1,0 @@
-# Top-level Kconfig for zmk-oled-gifs module.
-# The shield-specific Kconfig is included from boards/shields/oled_gifs/Kconfig.
-
-rsource "boards/shields/oled_gifs/Kconfig"
