@@ -1,8 +1,0 @@
-file_format: "1"
-id: zmk-oled-gifs-module
-name: zmk-oled-gifs-module
-type: shield
-url: https://nicekeyboards.com/nice-view
-requires: [nice_view_header]
-features:
-  - display
