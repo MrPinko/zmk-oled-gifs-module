@@ -1,2 +1,2 @@
-config SHIELD_NICE_VIEW_SHIELD_BASE
+config SHIELD_NICE_OLED
     def_bool $(shields_list_contains,zmk_oled_gifs_module)

@@ -9,7 +9,7 @@
 #endif
 
 const LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST LV_ATTRIBUTE_IMG_BOLT uint8_t bolt_map[] = {
-#if CONFIG_NICE_VIEW_WIDGET_INVERTED
+#if CONFIG_NICE_OLED_WIDGET_INVERTED
     0x00, 0x00, 0x00, 0xff, /*Color of index 0*/
     0xff, 0xff, 0xff, 0xff, /*Color of index 1*/
 #else
@@ -35,7 +35,7 @@ const lv_img_dsc_t bolt = {
 #endif
 
 const LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST LV_ATTRIBUTE_IMG_BT uint8_t bt_map[] = {
-#if CONFIG_NICE_VIEW_WIDGET_INVERTED
+#if CONFIG_NICE_OLED_WIDGET_INVERTED
     0x00, 0x00, 0x00, 0xff, /*Color of index 0*/
     0xff, 0xff, 0xff, 0xff, /*Color of index 1*/
 #else
@@ -63,7 +63,7 @@ const lv_img_dsc_t bt = {
 
 const LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST LV_ATTRIBUTE_IMG_BT_NO_SIGNAL uint8_t
     bt_no_signal_map[] = {
-#if CONFIG_NICE_VIEW_WIDGET_INVERTED
+#if CONFIG_NICE_OLED_WIDGET_INVERTED
         0x00, 0x00, 0x00, 0xff, /*Color of index 0*/
         0xff, 0xff, 0xff, 0xff, /*Color of index 1*/
 #else
@@ -91,7 +91,7 @@ const lv_img_dsc_t bt_no_signal = {
 
 const LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST LV_ATTRIBUTE_IMG_BT_UNBONDED uint8_t
     bt_unbonded_map[] = {
-#if CONFIG_NICE_VIEW_WIDGET_INVERTED
+#if CONFIG_NICE_OLED_WIDGET_INVERTED
         0xff, 0xff, 0xff, 0xff, /*Color of index 0*/
         0x00, 0x00, 0x00, 0xff, /*Color of index 1*/
 #else
@@ -119,7 +119,7 @@ const lv_img_dsc_t bt_unbonded = {
 #endif
 
 const LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST LV_ATTRIBUTE_IMG_USB uint8_t usb_map[] = {
-#if CONFIG_NICE_VIEW_WIDGET_INVERTED
+#if CONFIG_NICE_OLED_WIDGET_INVERTED
     0x00, 0x00, 0x00, 0xff, /*Color of index 0*/
     0xff, 0xff, 0xff, 0xff, /*Color of index 1*/
 #else
@@ -147,7 +147,7 @@ const lv_img_dsc_t usb = {
 #endif
 
 const LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST LV_ATTRIBUTE_IMG_GRID uint8_t grid_map[] = {
-#if CONFIG_NICE_VIEW_WIDGET_INVERTED
+#if CONFIG_NICE_OLED_WIDGET_INVERTED
     0x00, 0x00, 0x00, 0xff, /*Color of index 0*/
     0xff, 0xff, 0xff, 0xff, /*Color of index 1*/
 #else
@@ -192,7 +192,7 @@ const lv_img_dsc_t grid = {
 
 const LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST LV_ATTRIBUTE_IMG_PROFILES uint8_t
     profiles_map[] = {
-#if CONFIG_NICE_VIEW_WIDGET_INVERTED
+#if CONFIG_NICE_OLED_WIDGET_INVERTED
         0x00, 0x00, 0x00, 0xff, /*Color of index 0*/
         0xff, 0xff, 0xff, 0xff, /*Color of index 1*/
 #else
