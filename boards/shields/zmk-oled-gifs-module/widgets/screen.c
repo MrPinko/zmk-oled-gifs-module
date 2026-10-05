@@ -2,24 +2,14 @@
  * Copyright (c) 2024 Federico (MrPinko)
  * SPDX-License-Identifier: MIT
  *
- * Central (left) side screen widget implementation.
+ * Central (left) side screen widget implementation for 128×32 vertical OLED:
  *
- * Layout (portrait OLED rotated 90°, effectively 160 px wide × 68 px tall):
- *
- *   ┌────────────────────────────────────────────────────────────────────┐
- *   │  [top canvas]    SIG [icon]        BAT XX%                        │
- *   │  [bottom canvas] [profiles dots]                                  │
- *   │  [left artwork]  ← 36 px right of left edge, full height          │
- *   └────────────────────────────────────────────────────────────────────┘
- *
- * Two 68×68 px canvases are drawn, each rotated 90° to produce a 68-wide
- * horizontal strip.  The artwork image fills the remaining space.
- *
- * ZMK event subscriptions drive re-draws:
- *   - zmk_battery_state_changed   → redraws top canvas
- *   - zmk_usb_conn_state_changed  → redraws top canvas (USB detection)
- *   - zmk_endpoint_changed        → redraws top + bottom canvases
- *   - zmk_ble_active_profile_changed → redraws top + bottom canvases
+ * Layout along the 128-pixel length:
+ *   ┌──────────────────────┬────────────────────────────────────────────┐
+ *   │  Top Status (32×32)  │  Left Artwork / Animated GIF (up to 96×32) │
+ *   │  BT/USB + Battery    │  (under status canvas)                     │
+ *   └──────────────────────┴────────────────────────────────────────────┘
+ *   0                     32                                          128
  */
 
 #include <zephyr/kernel.h>
@@ -39,18 +29,16 @@
 #include "draw_left_image.h"
 #include "battery.h"
 #include "output.h"
-#include "profile.h"
 #include "screen.h"
 
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
-/* Global list of all instantiated screen widgets (usually just one). */
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
 
-/* ── Canvas draw helpers ─────────────────────────────────────────────────── */
+/* ── Canvas draw helper ──────────────────────────────────────────────────── */
 
 /**
- * Redraw the top canvas: output status (BLE/USB) + battery.
+ * Redraw the 32×32 status canvas: output (BT/USB) + battery.
  */
 static void draw_top(lv_obj_t *widget, lv_color_t cbuf[], const struct status_state *state) {
     lv_obj_t *canvas = lv_obj_get_child(widget, 0);
@@ -58,18 +46,6 @@ static void draw_top(lv_obj_t *widget, lv_color_t cbuf[], const struct status_st
 
     draw_output_status(canvas, state);
     draw_battery_status(canvas, state);
-
-    rotate_canvas(canvas, cbuf);
-}
-
-/**
- * Redraw the bottom canvas: BLE profile indicator.
- */
-static void draw_bottom(lv_obj_t *widget, lv_color_t cbuf[], const struct status_state *state) {
-    lv_obj_t *canvas = lv_obj_get_child(widget, 1);
-    fill_background(canvas);
-
-    draw_profile_status(canvas, state);
 
     rotate_canvas(canvas, cbuf);
 }
@@ -119,8 +95,7 @@ static void set_output_status(struct zmk_widget_screen *widget,
     widget->state.active_profile_connected = state->active_profile_connected;
     widget->state.active_profile_bonded    = state->active_profile_bonded;
 
-    draw_top(widget->obj,  widget->cbuf,  &widget->state);
-    draw_bottom(widget->obj, widget->cbuf3, &widget->state);
+    draw_top(widget->obj, widget->cbuf, &widget->state);
 }
 
 static void output_status_update_cb(struct output_status_state state) {
@@ -153,25 +128,16 @@ ZMK_SUBSCRIPTION(widget_output_status, zmk_ble_active_profile_changed);
 
 int zmk_widget_screen_init(struct zmk_widget_screen *widget, lv_obj_t *parent) {
     widget->obj = lv_obj_create(parent);
+    /* Resolution: 128 px long × 32 px wide */
     lv_obj_set_size(widget->obj, SCREEN_HEIGHT, SCREEN_WIDTH);
 
-    /* Top status canvas (battery + output). */
+    /* Top status canvas (32×32 px: battery + output) at x=0 */
     lv_obj_t *top = lv_canvas_create(widget->obj);
-    lv_obj_align(top, LV_ALIGN_TOP_RIGHT, 0, 0);
+    lv_obj_align(top, LV_ALIGN_TOP_LEFT, 0, 0);
     lv_canvas_set_buffer(top, widget->cbuf, BUFFER_SIZE, BUFFER_SIZE,
                          LV_IMG_CF_TRUE_COLOR);
 
-    /* Bottom status canvas (BLE profiles). */
-    lv_obj_t *bottom = lv_canvas_create(widget->obj);
-    lv_obj_align(bottom, LV_ALIGN_TOP_RIGHT, BUFFER_OFFSET_BOTTOM, 0);
-    lv_canvas_set_buffer(bottom, widget->cbuf3, BUFFER_SIZE, BUFFER_SIZE,
-                         LV_IMG_CF_TRUE_COLOR);
-
-    /*
-     * Draw the left-side artwork (static image, animation disabled by default).
-     * To enable animation: set CONFIG_NICE_LEFT_ANIMATION=y in lily58_left.conf.
-     * To add GIF frames: see draw_left_image.c.
-     */
+    /* Artwork / GIF animation starts at x=32 (under status canvas) */
     draw_left_image(widget->obj);
 
     /* Register this widget instance and start the event-driven listeners. */

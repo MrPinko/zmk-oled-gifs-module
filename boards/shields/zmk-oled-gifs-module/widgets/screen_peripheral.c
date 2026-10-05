@@ -2,19 +2,14 @@
  * Copyright (c) 2024 Federico (MrPinko)
  * SPDX-License-Identifier: MIT
  *
- * Peripheral (right) side screen widget implementation.
+ * Peripheral (right) side screen widget implementation for 128×32 vertical OLED:
  *
- * Layout (portrait OLED rotated 90°, effectively 160 px wide × 68 px tall):
- *
- *   ┌────────────────────────────────────────────────────────────────────┐
- *   │  [top canvas]   SIG [BT icon]   BAT XX%                          │
- *   │  [right artwork] ← animated GIF (CONFIG_NICE_RIGHT_ANIMATION=y)   │
- *   └────────────────────────────────────────────────────────────────────┘
- *
- * ZMK event subscriptions drive re-draws:
- *   - zmk_battery_state_changed          → redraws top canvas
- *   - zmk_usb_conn_state_changed         → redraws top canvas (USB detection)
- *   - zmk_split_peripheral_status_changed → redraws top canvas (BLE connection)
+ * Layout along the 128-pixel length:
+ *   ┌──────────────────────┬────────────────────────────────────────────┐
+ *   │  Top Status (32×32)  │  Right Artwork / Animated GIF (up to 96×32)│
+ *   │  BT + Battery        │  (under status canvas)                     │
+ *   └──────────────────────┴────────────────────────────────────────────┘
+ *   0                     32                                          128
  */
 
 #include <zephyr/kernel.h>
@@ -37,13 +32,12 @@
 
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
-/* Global list of all instantiated peripheral screen widgets (usually just one). */
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
 
 /* ── Canvas draw helper ──────────────────────────────────────────────────── */
 
 /**
- * Redraw the top canvas: output status (BLE connection) + battery.
+ * Redraw the 32×32 status canvas: output (BT connection) + battery.
  */
 static void draw_top(lv_obj_t *widget, lv_color_t cbuf[], const struct status_state *state) {
     lv_obj_t *canvas = lv_obj_get_child(widget, 0);
@@ -120,19 +114,16 @@ ZMK_SUBSCRIPTION(widget_peripheral_status, zmk_split_peripheral_status_changed);
 
 int zmk_widget_screen_init(struct zmk_widget_screen *widget, lv_obj_t *parent) {
     widget->obj = lv_obj_create(parent);
+    /* Resolution: 128 px long × 32 px wide */
     lv_obj_set_size(widget->obj, SCREEN_HEIGHT, SCREEN_WIDTH);
 
-    /* Single status canvas (output + battery). */
+    /* Single status canvas (32×32 px: output + battery) at x=0 */
     lv_obj_t *top = lv_canvas_create(widget->obj);
-    lv_obj_align(top, LV_ALIGN_TOP_RIGHT, 0, 0);
+    lv_obj_align(top, LV_ALIGN_TOP_LEFT, 0, 0);
     lv_canvas_set_buffer(top, widget->cbuf, BUFFER_SIZE, BUFFER_SIZE,
                          LV_IMG_CF_TRUE_COLOR);
 
-    /*
-     * Draw the right-side artwork (animated GIF by default).
-     * Animation is controlled by CONFIG_NICE_RIGHT_ANIMATION (default: y).
-     * To add GIF frames: see draw_right_image.c for step-by-step instructions.
-     */
+    /* Artwork / GIF animation starts at x=32 (under status canvas) */
     draw_right_image(widget->obj);
 
     /* Register this widget instance and start the event-driven listeners. */

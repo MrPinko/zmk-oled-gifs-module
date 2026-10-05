@@ -2,16 +2,18 @@
  * Copyright (c) 2024 Federico (MrPinko)
  * SPDX-License-Identifier: MIT
  *
- * Output / connectivity widget implementation.
- *
- * Icon layout (inside a 24×15 px white-filled rectangle at x=43, y=0):
- *   USB connected  → USB plug icon  (20×11 px) at x=45, y=2
- *   BLE bonded+connected    → Bluetooth icon (12×15 px) at x=49, y=0
- *   BLE bonded+disconnected → BT-no-signal   (12×15 px) at x=49, y=0
- *   BLE unbonded            → BT-unbonded    (22×15 px) at x=44, y=0
+ * Output / connectivity widget implementation for 32×32 status canvas:
+ *   - Upper half (y = 1..16) of the 32×32 canvas.
+ *   - Central side:
+ *       USB: centered USB plug icon (20×11 px)
+ *       BLE bonded: Bluetooth icon (12×15 px) + active profile number (1..5)
+ *       BLE unbonded: centered unbonded icon (22×15 px)
+ *   - Peripheral side:
+ *       Centered Bluetooth icon (connected or no signal)
  */
 
 #include <zephyr/kernel.h>
+#include <stdio.h>
 
 #include "output.h"
 #include "../assets/custom_fonts.h"
@@ -29,65 +31,74 @@ LV_IMG_DECLARE(usb);
 static void draw_usb_connected(lv_obj_t *canvas) {
     lv_draw_img_dsc_t img_dsc;
     lv_draw_img_dsc_init(&img_dsc);
-    lv_canvas_draw_img(canvas, 45, 2, &usb, &img_dsc);
+    /* USB icon is 20×11 px; center in 32 px: x = (32 - 20) / 2 = 6 */
+    lv_canvas_draw_img(canvas, 6, 2, &usb, &img_dsc);
 }
 
 static void draw_ble_unbonded(lv_obj_t *canvas) {
     lv_draw_img_dsc_t img_dsc;
     lv_draw_img_dsc_init(&img_dsc);
-    lv_canvas_draw_img(canvas, 44, 0, &bt_unbonded, &img_dsc);
+    /* Unbonded icon is 22×15 px; center in 32 px: x = (32 - 22) / 2 = 5 */
+    lv_canvas_draw_img(canvas, 5, 1, &bt_unbonded, &img_dsc);
+}
+
+static void draw_profile_number(lv_obj_t *canvas, int profile_index) {
+    lv_draw_label_dsc_t label_dsc;
+    init_label_dsc(&label_dsc, LVGL_FOREGROUND, &pixel_operator_mono, LV_TEXT_ALIGN_LEFT);
+
+    char text[4];
+    snprintf(text, sizeof(text), "%d", profile_index + 1);
+    /* Profile number at x=18, y=2 next to 12 px BT icon */
+    lv_canvas_draw_text(canvas, 18, 2, 12, &label_dsc, text);
+}
+
+static void draw_ble_central(lv_obj_t *canvas, const struct status_state *state) {
+    lv_draw_img_dsc_t img_dsc;
+    lv_draw_img_dsc_init(&img_dsc);
+
+    if (!state->active_profile_bonded) {
+        draw_ble_unbonded(canvas);
+        return;
+    }
+
+    /* BT icon at x=4, y=1 (12 px wide) + profile number at x=18 */
+    if (state->active_profile_connected) {
+        lv_canvas_draw_img(canvas, 4, 1, &bt, &img_dsc);
+    } else {
+        lv_canvas_draw_img(canvas, 4, 1, &bt_no_signal, &img_dsc);
+    }
+
+    draw_profile_number(canvas, state->active_profile_index);
 }
 
 #endif /* central */
 
-static void draw_ble_disconnected(lv_obj_t *canvas) {
+static void draw_ble_peripheral(lv_obj_t *canvas, const struct status_state *state) {
     lv_draw_img_dsc_t img_dsc;
     lv_draw_img_dsc_init(&img_dsc);
-    lv_canvas_draw_img(canvas, 49, 0, &bt_no_signal, &img_dsc);
-}
 
-static void draw_ble_connected(lv_obj_t *canvas) {
-    lv_draw_img_dsc_t img_dsc;
-    lv_draw_img_dsc_init(&img_dsc);
-    lv_canvas_draw_img(canvas, 49, 0, &bt, &img_dsc);
+    /* Center 12×15 px BT icon in 32 px: x = (32 - 12) / 2 = 10 */
+    if (state->connected) {
+        lv_canvas_draw_img(canvas, 10, 1, &bt, &img_dsc);
+    } else {
+        lv_canvas_draw_img(canvas, 10, 1, &bt_no_signal, &img_dsc);
+    }
 }
 
 /* ── Public API ──────────────────────────────────────────────────────────── */
 
 void draw_output_status(lv_obj_t *canvas, const struct status_state *state) {
-    /* Draw "SIG" label. */
-    lv_draw_label_dsc_t label_dsc;
-    init_label_dsc(&label_dsc, LVGL_FOREGROUND, &pixel_operator_mono, LV_TEXT_ALIGN_LEFT);
-    lv_canvas_draw_text(canvas, 0, 1, 25, &label_dsc, "SIG");
-
-    /* White filled rectangle as icon background. */
-    lv_draw_rect_dsc_t rect_dsc;
-    init_rect_dsc(&rect_dsc, LVGL_FOREGROUND);
-    lv_canvas_draw_rect(canvas, 43, 0, 24, 15, &rect_dsc);
-
 #if !IS_ENABLED(CONFIG_ZMK_SPLIT) || IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_CENTRAL)
-    /* Central: select icon based on active transport and BLE bond state. */
     switch (state->selected_endpoint.transport) {
     case ZMK_TRANSPORT_USB:
         draw_usb_connected(canvas);
         break;
 
     case ZMK_TRANSPORT_BLE:
-        if (!state->active_profile_bonded) {
-            draw_ble_unbonded(canvas);
-        } else if (state->active_profile_connected) {
-            draw_ble_connected(canvas);
-        } else {
-            draw_ble_disconnected(canvas);
-        }
+        draw_ble_central(canvas, state);
         break;
     }
 #else
-    /* Peripheral: show connection state only. */
-    if (state->connected) {
-        draw_ble_connected(canvas);
-    } else {
-        draw_ble_disconnected(canvas);
-    }
+    draw_ble_peripheral(canvas, state);
 #endif
 }

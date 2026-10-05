@@ -11,6 +11,7 @@
 if(CONFIG_ZMK_DISPLAY)
   zephyr_library()
   zephyr_library_include_directories(${CMAKE_SOURCE_DIR}/include)
+  zephyr_library_include_directories(include)
 
   # ── Shared sources (compiled on both central and peripheral) ──────────────
   zephyr_library_sources(
@@ -26,7 +27,6 @@ if(CONFIG_ZMK_DISPLAY)
     zephyr_library_sources(
       assets/left_image.c
       widgets/screen.c
-      widgets/profile.c
       widgets/draw_left_image.c
     )
   # ── Peripheral (right) side ───────────────────────────────────────────────

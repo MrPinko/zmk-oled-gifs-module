@@ -2,8 +2,9 @@
  * Copyright (c) 2024 Federico (MrPinko)
  * SPDX-License-Identifier: MIT
  *
- * Central (left) side screen widget: aggregates battery, output (BLE/USB),
- * BLE profile indicator, and the left artwork into a single LVGL container.
+ * Central (left) side screen widget for 128×32 vertical OLED:
+ *   - Status canvas (32×32 px rotated): Output (BLE/USB) + Battery
+ *   - Artwork area: Image / GIF animation (under status canvas)
  */
 
 #pragma once
@@ -15,13 +16,12 @@
 
 /**
  * Internal widget state for the central screen.
- * Two canvas buffers: one for the top status strip, one for the bottom strip.
+ * Single canvas buffer: 32×32 px for top status area.
  */
 struct zmk_widget_screen {
     sys_snode_t   node;
     lv_obj_t     *obj;
-    lv_color_t    cbuf[BUFFER_SIZE * BUFFER_SIZE];   /**< Top canvas buffer  */
-    lv_color_t    cbuf3[BUFFER_SIZE * BUFFER_SIZE];  /**< Bottom canvas buffer */
+    lv_color_t    cbuf[BUFFER_SIZE * BUFFER_SIZE];   /**< 32×32 px status canvas buffer */
     struct status_state state;
 };
 

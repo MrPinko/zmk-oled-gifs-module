@@ -4,14 +4,14 @@
  *
  * Shared utility helpers for the zmk-oled-gifs-module widgets.
  *
- * Screen geometry (Lily58 with nice!nano v2 + SSD1306 128×32 rotated):
- *   SCREEN_WIDTH  = 68 px  (the short axis, used as canvas height)
- *   SCREEN_HEIGHT = 160 px (the long axis, used as canvas width)
- *   BUFFER_SIZE   = 68 px  (square canvas, rotated 90° to fill the display)
+ * Screen geometry: Standard 128×32 OLED (SSD1306) mounted vertically on Lily58:
+ *   SCREEN_WIDTH  = 32 px  (physical width across the board)
+ *   SCREEN_HEIGHT = 128 px (physical height along the board)
+ *   BUFFER_SIZE   = 32 px  (square canvas for status area, rotated 90°)
  *
- * The display is physically 128×32 but mounted sideways, so we render into
- * a 68×68 canvas and rotate it 90° before pushing to the framebuffer.
- * BUFFER_OFFSET_BOTTOM positions the second canvas directly below the first.
+ * Layout along the 128 px vertical length:
+ *   X = 0..31   : Status canvas (32×32 px rotated) with Battery & Bluetooth
+ *   X = 32..127 : Image / Animated GIF area (up to 96 px tall × 32 px wide)
  */
 
 #pragma once
@@ -19,18 +19,12 @@
 #include <lvgl.h>
 #include <zmk/endpoints.h>
 
-/* ── Physical display geometry ───────────────────────────────────────────── */
-#define SCREEN_WIDTH          68
-#define SCREEN_HEIGHT         160
+/* ── Physical display geometry (128×32 OLED vertical) ────────────────────── */
+#define SCREEN_WIDTH          32
+#define SCREEN_HEIGHT         128
 
-/* ── Canvas / render buffer ──────────────────────────────────────────────── */
-#define BUFFER_SIZE           68
-/*
- * The second canvas (bottom) is aligned relative to LV_ALIGN_TOP_RIGHT.
- * At −129 px in X it sits immediately left of the first canvas inside
- * the 160-pixel-wide container.
- */
-#define BUFFER_OFFSET_BOTTOM  (-129)
+/* ── Status canvas buffer size (32×32 px square for in-place 90° rotation) ── */
+#define BUFFER_SIZE           32
 
 /* ── LVGL color aliases ───────────────────────────────────────────────────── */
 #define LVGL_BACKGROUND  (IS_ENABLED(CONFIG_NICE_OLED_WIDGET_INVERTED) \
@@ -61,9 +55,10 @@ struct status_state {
 void to_uppercase(char *str);
 
 /**
- * Rotate the canvas 90° clockwise.
+ * Rotate the 32×32 canvas 90° clockwise so horizontal text/icons
+ * appear oriented correctly on the vertically mounted display.
  * @param canvas  The lv_canvas_t object to transform.
- * @param cbuf    The backing pixel buffer for @p canvas (used as scratch).
+ * @param cbuf    The backing pixel buffer for @p canvas.
  */
 void rotate_canvas(lv_obj_t *canvas, lv_color_t cbuf[]);
 
