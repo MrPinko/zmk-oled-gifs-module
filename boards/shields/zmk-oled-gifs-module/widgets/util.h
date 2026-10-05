@@ -36,6 +36,7 @@
 struct status_state {
     uint8_t battery;
     bool    charging;
+    bool    connected;
 
 #if !IS_ENABLED(CONFIG_ZMK_SPLIT) || IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_CENTRAL)
     /* Central-only fields */
@@ -43,9 +44,6 @@ struct status_state {
     int  active_profile_index;
     bool active_profile_connected;
     bool active_profile_bonded;
-#else
-    /* Peripheral-only field */
-    bool connected;
 #endif
 };
 

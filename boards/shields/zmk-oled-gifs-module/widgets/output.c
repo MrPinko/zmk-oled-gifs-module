@@ -71,7 +71,7 @@ static void draw_ble_central(lv_obj_t *canvas, const struct status_state *state)
     draw_profile_number(canvas, state->active_profile_index);
 }
 
-#endif /* central */
+#else /* peripheral */
 
 static void draw_ble_peripheral(lv_obj_t *canvas, const struct status_state *state) {
     lv_draw_img_dsc_t img_dsc;
@@ -84,6 +84,8 @@ static void draw_ble_peripheral(lv_obj_t *canvas, const struct status_state *sta
         lv_canvas_draw_img(canvas, 10, 1, &bt_no_signal, &img_dsc);
     }
 }
+
+#endif
 
 /* ── Public API ──────────────────────────────────────────────────────────── */
 
