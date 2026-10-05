@@ -9,6 +9,9 @@
 #   - Peripheral (right) only: screen_peripheral.c, right artwork & animation
 
 if(CONFIG_ZMK_DISPLAY)
+  zephyr_library()
+  zephyr_library_include_directories(${CMAKE_SOURCE_DIR}/include)
+
   # ── Shared sources (compiled on both central and peripheral) ──────────────
   zephyr_library_sources(
     custom_status_screen.c
