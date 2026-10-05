@@ -1,3 +1,6 @@
+# Copyright (c) 2024 Federico (MrPinko)
+# SPDX-License-Identifier: MIT
+
 name: "zmk-oled-gifs-module"
 build:
   settings:
