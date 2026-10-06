@@ -31,7 +31,7 @@ lv_obj_t *zmk_display_status_screen(void) {
 
 #if IS_ENABLED(CONFIG_NICE_OLED_WIDGET_STATUS)
     zmk_widget_screen_init(&screen_widget, screen);
-    lv_obj_align(zmk_widget_screen_obj(&screen_widget), LV_ALIGN_TOP_LEFT, 0, 0);
+    lv_obj_align(zmk_widget_screen_obj(&screen_widget), NULL, LV_ALIGN_TOP_LEFT, 0, 0);
 #endif /* CONFIG_NICE_OLED_WIDGET_STATUS */
 
     return screen;

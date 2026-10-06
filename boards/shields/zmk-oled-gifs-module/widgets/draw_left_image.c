@@ -99,5 +99,5 @@ void draw_left_image(lv_obj_t *parent) {
     /*
      * Position: starts at x=0 (fills the space under the TOP_RIGHT status bar).
      */
-    lv_obj_align(art, LV_ALIGN_TOP_LEFT, 0, 0);
+    lv_obj_align(art, NULL, LV_ALIGN_TOP_LEFT, 0, 0);
 }
