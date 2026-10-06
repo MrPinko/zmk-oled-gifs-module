@@ -1,7 +1,12 @@
-if SHIELD_ZMK_OLED_GIFS_MODULE
+# Copyright (c) 2024 Federico (MrPinko)
+# SPDX-License-Identifier: MIT
+#
+# Kconfig defaults for the zmk-oled-gifs-module shield.
+# These are applied automatically when the shield is selected.
 
+# ── LVGL display settings ────────────────────────────────────────────────────
 config LV_Z_VDB_SIZE
-    default 64
+    default 100
 
 config LV_DPI_DEF
     default 148
@@ -13,20 +18,77 @@ choice LV_COLOR_DEPTH
     default LV_COLOR_DEPTH_1
 endchoice
 
+# ── LVGL features required by the widgets ────────────────────────────────────
+# Select the LVGL widget features that our custom widgets use.
+config NICE_OLED_WIDGET_STATUS
+    bool
+    default y if ZMK_DISPLAY
+    select LV_USE_LABEL
+    select LV_USE_IMG
+    select LV_USE_CANVAS
+    select LV_USE_ANIMIMG
+    select LV_USE_ANIMATION
+
+# ── ZMK display work queue ────────────────────────────────────────────────────
+choice ZMK_DISPLAY_WORK_QUEUE
+    default ZMK_DISPLAY_WORK_QUEUE_DEDICATED
+endchoice
+
+# ── Custom status screen ──────────────────────────────────────────────────────
+choice ZMK_DISPLAY_STATUS_SCREEN
+    default ZMK_DISPLAY_STATUS_SCREEN_CUSTOM
+endchoice
+
+# ── Memory pool for LVGL ──────────────────────────────────────────────────────
 config LV_Z_MEM_POOL_SIZE
     default 4096 if ZMK_DISPLAY_STATUS_SCREEN_CUSTOM
 
-config NICE_OLED_ROTATE_270
-    bool "Rotate the portrait view counter-clockwise"
+# ── Status bar configuration ──────────────────────────────────────────────────
+config NICE_OLED_STATUS_BAR_SIZE
+    int "Height of status bar in pixels (along vertical OLED length)"
+    default 20
+    help
+      Height in pixels of the status area (Bluetooth + Battery row) along the
+      vertical length of the OLED. Default is 20 px.
+
+config NICE_OLED_FLIP
+    bool "Flip display layout (places status bar at opposite end)"
     default n
     help
-      Change this if the OLED is mounted in the opposite direction.
+      When enabled, places the status bar at LV_ALIGN_TOP_LEFT instead of
+      LV_ALIGN_TOP_RIGHT. Useful if the display is physically inverted.
 
-config NICE_OLED_VIEWER
-    bool
-    default y if ZMK_DISPLAY
-    select LV_USE_CANVAS
-    select LV_USE_IMG
-    select LV_FONT_UNSCII_8
+# ── Left (central) side animation ────────────────────────────────────────────
+config NICE_LEFT_ANIMATION
+    bool "Enable animated GIF on central (left) side OLED"
+    default n
+    help
+      When enabled, the central side uses lv_animimg to cycle through all
+      frames defined in assets/left_image.c. When disabled, only the first
+      frame is shown as a static image.
 
-endif
+config NICE_LEFT_ANIMATION_MS
+    int "Total animation duration for left side (ms)"
+    default 2400
+    help
+      Total time in milliseconds for one full loop of the left-side animation.
+
+# ── Right (peripheral) side animation ────────────────────────────────────────
+config NICE_RIGHT_ANIMATION
+    bool "Enable animated GIF on peripheral (right) side OLED"
+    default y
+    help
+      When enabled, the peripheral side uses lv_animimg to cycle through all
+      frames defined in assets/right_image.c. When disabled, only the first
+      frame is shown as a static image.
+
+config NICE_RIGHT_ANIMATION_MS
+    int "Total animation duration for right side (ms)"
+    default 2400
+    help
+      Total time in milliseconds for one full loop of the right-side animation.
+
+# ── Display inversion ─────────────────────────────────────────────────────────
+config NICE_OLED_WIDGET_INVERTED
+    bool "Invert display colors (white-on-black instead of black-on-white)"
+    default n

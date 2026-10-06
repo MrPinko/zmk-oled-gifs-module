@@ -1,2 +1,5 @@
-config SHIELD_ZMK_OLED_GIFS_MODULE
+# Copyright (c) 2024 Federico (MrPinko)
+# SPDX-License-Identifier: MIT
+
+config SHIELD_ZMK_OLED_GIFS
     def_bool $(shields_list_contains,zmk_oled_gifs_module)
