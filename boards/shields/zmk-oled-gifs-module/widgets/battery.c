@@ -34,7 +34,7 @@ static void draw_charging_level(lv_obj_t *canvas, const struct status_state *sta
     /* Bolt icon (5×9 px) */
     lv_draw_img_dsc_t img_dsc;
     lv_draw_img_dsc_init(&img_dsc);
-    lv_canvas_draw_img(canvas, 13, 5, &bolt, &img_dsc);
+    lv_canvas_draw_img(canvas, 13, 6, &bolt, &img_dsc);
 
     /* Text next to bolt: x = 19, y = 3, width = 13 */
     lv_draw_label_dsc_t label_dsc;
