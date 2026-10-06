@@ -24,22 +24,20 @@ void prepare_status_canvas(lv_obj_t *canvas) {
     fill_background(canvas);
 }
 
-// void rotate_canvas(lv_obj_t *canvas, lv_color_t cbuf[]) {
-//     /* 90° clockwise rotation from draw_buf (32×STATUS_BAR_SIZE) into cbuf (STATUS_BAR_SIZE×32) */
-//     for (int y = 0; y < STATUS_BAR_SIZE; y++) {
-//         for (int x = 0; x < SCREEN_WIDTH; x++) {
-//             int rx = STATUS_BAR_SIZE - 1 - y;
-//             int ry = x;
-//             cbuf[ry * STATUS_BAR_SIZE + rx] = draw_buf[y * SCREEN_WIDTH + x];
-//         }
-//     }
-//     lv_canvas_set_buffer(canvas, cbuf, STATUS_BAR_SIZE, SCREEN_WIDTH, LV_IMG_CF_TRUE_COLOR);
-// #if IS_ENABLED(CONFIG_NICE_OLED_FLIP)
-//     lv_obj_align(canvas, LV_ALIGN_TOP_LEFT, 0, 0);
-// #else
-//     lv_obj_align(canvas, LV_ALIGN_TOP_RIGHT, 0, 0);
-// #endif
-// }
+void rotate_canvas(lv_obj_t *canvas, lv_color_t cbuf[]) {
+  static lv_color_t cbuf_tmp[CANVAS_HEIGHT * CANVAS_HEIGHT];
+  memcpy(cbuf_tmp, cbuf, sizeof(cbuf_tmp));
+
+  lv_img_dsc_t img;
+  img.data = (void *)cbuf_tmp;
+  img.header.cf = LV_IMG_CF_TRUE_COLOR;
+  img.header.w = CANVAS_HEIGHT;
+  img.header.h = CANVAS_HEIGHT;
+
+  lv_canvas_fill_bg(canvas, LVGL_BACKGROUND, LV_OPA_COVER);
+  lv_canvas_transform(canvas, &img, 900, LV_IMG_ZOOM_NONE, -1, 0,
+                      CANVAS_HEIGHT / 2, CANVAS_HEIGHT / 2, false);
+}
 
 void fill_background(lv_obj_t *canvas) {
     lv_draw_rect_dsc_t rect_dsc;
