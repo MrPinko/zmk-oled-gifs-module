@@ -134,9 +134,9 @@ int zmk_widget_screen_init(struct zmk_widget_screen *widget, lv_obj_t *parent) {
     lv_obj_align(widget->obj, LV_ALIGN_TOP_LEFT, 0, 0);
 
     /* Status bar canvas placed at physical top of OLED */
-    lv_obj_t *top = lv_canvas_create(widget->obj);
-    lv_canvas_set_buffer(top, widget->cbuf, STATUS_BAR_SIZE, SCREEN_WIDTH,
-                         LV_IMG_CF_TRUE_COLOR);
+    // lv_obj_t *top = lv_canvas_create(widget->obj);
+    // lv_canvas_set_buffer(top, widget->cbuf, STATUS_BAR_SIZE, SCREEN_WIDTH,
+    //                      LV_IMG_CF_TRUE_COLOR);
 #if IS_ENABLED(CONFIG_NICE_OLED_FLIP)
     lv_obj_align(top, LV_ALIGN_TOP_LEFT, 0, 0);
 #else
@@ -148,8 +148,8 @@ int zmk_widget_screen_init(struct zmk_widget_screen *widget, lv_obj_t *parent) {
 
     /* Register this widget instance and start the event-driven listeners. */
     sys_slist_append(&widgets, &widget->node);
-    widget_battery_status_init();
-    widget_output_status_init();
+    // widget_battery_status_init();
+    // widget_output_status_init();
 
     return 0;
 }

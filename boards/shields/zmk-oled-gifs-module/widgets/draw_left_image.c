@@ -30,7 +30,6 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 /* ── Image & frame declarations ──────────────────────────────────────────── */
 
 LV_IMG_DECLARE(left_image);
-LV_IMG_DECLARE(left_image_2);
 /* Add more image declarations here:
  * LV_IMG_DECLARE(left_image_2);
  * LV_IMG_DECLARE(left_image_3);
@@ -39,7 +38,6 @@ LV_IMG_DECLARE(left_image_2);
 /* List of images to cycle through when cycle combo is pressed */
 static const lv_img_dsc_t *left_cycle_images[] = {
     &left_image,
-    &left_image_2,
     /* Add additional images to cycle through here:
      * &left_image_2,
      * &left_image_3,
@@ -53,7 +51,6 @@ static const lv_img_dsc_t *left_cycle_images[] = {
 
 static const lv_img_dsc_t *anim_imgs[LEFT_ANIM_FRAME_COUNT] = {
     &left_image,
-    &left_image_2,
 };
 
 static lv_obj_t *left_art_obj = NULL;

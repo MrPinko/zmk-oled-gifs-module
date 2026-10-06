@@ -32,7 +32,7 @@
 #ifdef CONFIG_NICE_OLED_STATUS_BAR_SIZE
 #define STATUS_BAR_SIZE       CONFIG_NICE_OLED_STATUS_BAR_SIZE
 #else
-#define STATUS_BAR_SIZE       20
+#define STATUS_BAR_SIZE       10
 #endif
 #endif
 

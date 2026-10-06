@@ -39,7 +39,8 @@ static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
 /**
  * Redraw the 32×32 status canvas: output (BT connection) + battery.
  */
-static void draw_top(lv_obj_t *widget, lv_color_t cbuf[], const struct status_state *state) {
+static void draw_top(lv_obj_t *widget, lv_color_t cbuf[], const struct status_state *state)
+{
     lv_obj_t *canvas = lv_obj_get_child(widget, 0);
 
     prepare_status_canvas(canvas);
@@ -52,8 +53,8 @@ static void draw_top(lv_obj_t *widget, lv_color_t cbuf[], const struct status_st
 
 /* ── Battery listener ────────────────────────────────────────────────────── */
 
-static void set_battery_status(struct zmk_widget_screen *widget,
-                               struct battery_status_state state) {
+static void set_battery_status(struct zmk_widget_screen *widget, struct battery_status_state state)
+{
 #if IS_ENABLED(CONFIG_USB_DEVICE_STACK)
     widget->state.charging = state.usb_present;
 #endif
@@ -62,14 +63,17 @@ static void set_battery_status(struct zmk_widget_screen *widget,
     draw_top(widget->obj, widget->cbuf, &widget->state);
 }
 
-static void battery_status_update_cb(struct battery_status_state state) {
+static void battery_status_update_cb(struct battery_status_state state)
+{
     struct zmk_widget_screen *widget;
-    SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) {
+    SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node)
+    {
         set_battery_status(widget, state);
     }
 }
 
-static struct battery_status_state battery_status_get_state(const zmk_event_t *eh) {
+static struct battery_status_state battery_status_get_state(const zmk_event_t *eh)
+{
     const struct zmk_battery_state_changed *ev = as_zmk_battery_state_changed(eh);
     return (struct battery_status_state){
         .level = (ev != NULL) ? ev->state_of_charge : zmk_battery_state_of_charge(),
@@ -88,21 +92,24 @@ ZMK_SUBSCRIPTION(widget_battery_status, zmk_usb_conn_state_changed);
 
 /* ── Peripheral BLE connection listener ──────────────────────────────────── */
 
-static struct peripheral_status_state get_peripheral_state(const zmk_event_t *_eh) {
+static struct peripheral_status_state get_peripheral_state(const zmk_event_t *_eh)
+{
     return (struct peripheral_status_state){
         .connected = zmk_split_bt_peripheral_is_connected(),
     };
 }
 
-static void set_connection_status(struct zmk_widget_screen *widget,
-                                  struct peripheral_status_state state) {
+static void set_connection_status(struct zmk_widget_screen *widget, struct peripheral_status_state state)
+{
     widget->state.connected = state.connected;
     draw_top(widget->obj, widget->cbuf, &widget->state);
 }
 
-static void peripheral_status_update_cb(struct peripheral_status_state state) {
+static void peripheral_status_update_cb(struct peripheral_status_state state)
+{
     struct zmk_widget_screen *widget;
-    SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) {
+    SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node)
+    {
         set_connection_status(widget, state);
     }
 }
@@ -113,7 +120,8 @@ ZMK_SUBSCRIPTION(widget_peripheral_status, zmk_split_peripheral_status_changed);
 
 /* ── Widget initialisation ───────────────────────────────────────────────── */
 
-int zmk_widget_screen_init(struct zmk_widget_screen *widget, lv_obj_t *parent) {
+int zmk_widget_screen_init(struct zmk_widget_screen *widget, lv_obj_t *parent)
+{
     widget->obj = lv_obj_create(parent);
     /* Resolution: 128 px long × 32 px wide */
     lv_obj_set_size(widget->obj, SCREEN_HEIGHT, SCREEN_WIDTH);
@@ -140,6 +148,7 @@ int zmk_widget_screen_init(struct zmk_widget_screen *widget, lv_obj_t *parent) {
     return 0;
 }
 
-lv_obj_t *zmk_widget_screen_obj(struct zmk_widget_screen *widget) {
+lv_obj_t *zmk_widget_screen_obj(struct zmk_widget_screen *widget)
+{
     return widget->obj;
 }
