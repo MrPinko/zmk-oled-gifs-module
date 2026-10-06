@@ -24,22 +24,22 @@ void prepare_status_canvas(lv_obj_t *canvas) {
     fill_background(canvas);
 }
 
-void rotate_canvas(lv_obj_t *canvas, lv_color_t cbuf[]) {
-    /* 90° clockwise rotation from draw_buf (32×STATUS_BAR_SIZE) into cbuf (STATUS_BAR_SIZE×32) */
-    for (int y = 0; y < STATUS_BAR_SIZE; y++) {
-        for (int x = 0; x < SCREEN_WIDTH; x++) {
-            int rx = STATUS_BAR_SIZE - 1 - y;
-            int ry = x;
-            cbuf[ry * STATUS_BAR_SIZE + rx] = draw_buf[y * SCREEN_WIDTH + x];
-        }
-    }
-    lv_canvas_set_buffer(canvas, cbuf, STATUS_BAR_SIZE, SCREEN_WIDTH, LV_IMG_CF_TRUE_COLOR);
-#if IS_ENABLED(CONFIG_NICE_OLED_FLIP)
-    lv_obj_align(canvas, LV_ALIGN_TOP_LEFT, 0, 0);
-#else
-    lv_obj_align(canvas, LV_ALIGN_TOP_RIGHT, 0, 0);
-#endif
-}
+// void rotate_canvas(lv_obj_t *canvas, lv_color_t cbuf[]) {
+//     /* 90° clockwise rotation from draw_buf (32×STATUS_BAR_SIZE) into cbuf (STATUS_BAR_SIZE×32) */
+//     for (int y = 0; y < STATUS_BAR_SIZE; y++) {
+//         for (int x = 0; x < SCREEN_WIDTH; x++) {
+//             int rx = STATUS_BAR_SIZE - 1 - y;
+//             int ry = x;
+//             cbuf[ry * STATUS_BAR_SIZE + rx] = draw_buf[y * SCREEN_WIDTH + x];
+//         }
+//     }
+//     lv_canvas_set_buffer(canvas, cbuf, STATUS_BAR_SIZE, SCREEN_WIDTH, LV_IMG_CF_TRUE_COLOR);
+// #if IS_ENABLED(CONFIG_NICE_OLED_FLIP)
+//     lv_obj_align(canvas, LV_ALIGN_TOP_LEFT, 0, 0);
+// #else
+//     lv_obj_align(canvas, LV_ALIGN_TOP_RIGHT, 0, 0);
+// #endif
+// }
 
 void fill_background(lv_obj_t *canvas) {
     lv_draw_rect_dsc_t rect_dsc;

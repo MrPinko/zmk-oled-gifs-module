@@ -74,7 +74,7 @@ void prepare_status_canvas(lv_obj_t *canvas);
  * @param canvas  The lv_canvas_t object.
  * @param cbuf    The backing pixel buffer for display.
  */
-void rotate_canvas(lv_obj_t *canvas, lv_color_t cbuf[]);
+//void rotate_canvas(lv_obj_t *canvas, lv_color_t cbuf[]);
 
 /** Fill the canvas with LVGL_BACKGROUND. */
 void fill_background(lv_obj_t *canvas);
