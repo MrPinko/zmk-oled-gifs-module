@@ -137,11 +137,11 @@ int zmk_widget_screen_init(struct zmk_widget_screen *widget, lv_obj_t *parent) {
     // lv_obj_t *top = lv_canvas_create(widget->obj);
     // lv_canvas_set_buffer(top, widget->cbuf, STATUS_BAR_SIZE, SCREEN_WIDTH,
     //                      LV_IMG_CF_TRUE_COLOR);
-#if IS_ENABLED(CONFIG_NICE_OLED_FLIP)
-    lv_obj_align(top, LV_ALIGN_TOP_LEFT, 0, 0);
-#else
-    lv_obj_align(top, LV_ALIGN_TOP_RIGHT, 0, 0);
-#endif
+// #if IS_ENABLED(CONFIG_NICE_OLED_FLIP)
+//     lv_obj_align(top, LV_ALIGN_TOP_LEFT, 0, 0);
+// #else
+//     lv_obj_align(top, LV_ALIGN_TOP_RIGHT, 0, 0);
+// #endif
 
     /* Artwork / GIF animation starts immediately below the status bar */
     draw_left_image(widget->obj);
