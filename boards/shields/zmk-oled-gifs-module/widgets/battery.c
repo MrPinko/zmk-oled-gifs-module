@@ -18,7 +18,7 @@ LV_IMG_DECLARE(bolt);
 
 static void draw_level(lv_obj_t *canvas, const struct status_state *state) {
     lv_draw_label_dsc_t label_dsc;
-    init_label_dsc(&label_dsc, LVGL_FOREGROUND, &pixel_operator_mono_8, LV_TEXT_ALIGN_RIGHT);
+    init_label_dsc(&label_dsc, LVGL_FOREGROUND, &pixel_operator_mono_12, LV_TEXT_ALIGN_RIGHT);
 
     char text[8];
     if (state->battery >= 100) {
@@ -38,7 +38,7 @@ static void draw_charging_level(lv_obj_t *canvas, const struct status_state *sta
 
     /* Text next to bolt: x = 19, y = 3, width = 13 */
     lv_draw_label_dsc_t label_dsc;
-    init_label_dsc(&label_dsc, LVGL_FOREGROUND, &pixel_operator_mono_8, LV_TEXT_ALIGN_LEFT);
+    init_label_dsc(&label_dsc, LVGL_FOREGROUND, &pixel_operator_mono_12, LV_TEXT_ALIGN_LEFT);
 
     char text[8];
     snprintf(text, sizeof(text), "%d", state->battery);

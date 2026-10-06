@@ -49,10 +49,11 @@ static const lv_img_dsc_t *left_cycle_images[] = {
 #define LEFT_CYCLE_COUNT (sizeof(left_cycle_images) / sizeof(left_cycle_images[0]))
 
 /* Animation frame list (used when CONFIG_NICE_LEFT_ANIMATION=y) */
-#define LEFT_ANIM_FRAME_COUNT 1
+#define LEFT_ANIM_FRAME_COUNT 2
 
 static const lv_img_dsc_t *anim_imgs[LEFT_ANIM_FRAME_COUNT] = {
     &left_image,
+    &left_image_2,
 };
 
 static lv_obj_t *left_art_obj = NULL;

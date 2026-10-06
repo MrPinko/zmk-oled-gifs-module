@@ -3,5 +3,6 @@
 
 LV_FONT_DECLARE(pixel_operator_mono);
 LV_FONT_DECLARE(pixel_operator_mono_8);
+LV_FONT_DECLARE(pixel_operator_mono_12);
 
 #endif
