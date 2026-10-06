@@ -1,5 +1,1 @@
-/*
- * Copyright (c) 2022 The ZMK Contributors
- *
- * SPDX-License-Identifier: MIT
- */
+/* The keyboard shield supplies the OLED device and its 128x32 resolution. */
