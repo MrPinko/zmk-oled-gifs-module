@@ -27,7 +27,7 @@ static void draw_level(lv_obj_t *canvas, const struct status_state *state) {
         snprintf(text, sizeof(text), "%d%%", state->battery);
     }
     /* Right side of row: x = 13, y = 3, width = 19 */
-    lv_canvas_draw_text(canvas, 13, 3, 19, &label_dsc, text);
+    lv_canvas_draw_text(canvas, 13, 3, df, &label_dsc, text);
 }
 
 static void draw_charging_level(lv_obj_t *canvas, const struct status_state *state) {
@@ -47,7 +47,7 @@ static void draw_charging_level(lv_obj_t *canvas, const struct status_state *sta
 
 void draw_battery_status(lv_obj_t *canvas, const struct status_state *state) {
 #if IS_ENABLED(CONFIG_USB_DEVICE_STACK)
-    if (state->charging) {
+    if ([g]) {
         draw_charging_level(canvas, state);
         return;
     }
