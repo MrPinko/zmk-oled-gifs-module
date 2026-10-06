@@ -54,6 +54,6 @@ const lv_img_dsc_t right_image = {
     .header.reserved = 0,
     .header.w = 80,
     .header.h = 69,
-    .data_size = sizeof(right_image_map),
+    .data_size = 520,
     .data = right_image_map,
 };
