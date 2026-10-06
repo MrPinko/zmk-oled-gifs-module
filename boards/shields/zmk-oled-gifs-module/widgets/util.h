@@ -5,13 +5,13 @@
  * Shared utility helpers for the zmk-oled-gifs-module widgets.
  *
  * Screen geometry: Standard 128×32 OLED (SSD1306) mounted vertically on Lily58:
- *   SCREEN_WIDTH  = 32 px  (physical width across the board)
- *   SCREEN_HEIGHT = 128 px (physical height along the board)
- *   BUFFER_SIZE   = 32 px  (square canvas for status area, rotated 90°)
+ *   SCREEN_WIDTH    = 32 px  (physical width across the board)
+ *   SCREEN_HEIGHT   = 128 px (physical height along the board)
+ *   STATUS_BAR_SIZE = 20 px  (status bar height along the OLED, configurable)
  *
  * Layout along the 128 px vertical length:
- *   X = 0..31   : Status canvas (32×32 px rotated) with Battery & Bluetooth
- *   X = 32..127 : Image / Animated GIF area (up to 96 px tall × 32 px wide)
+ *   Physical TOP    : Status bar (STATUS_BAR_SIZE × 32 px): [BLE] [Battery] in one row
+ *   Physical BOTTOM : Image / Animated GIF area (under status bar)
  */
 
 #pragma once
@@ -23,8 +23,18 @@
 #define SCREEN_WIDTH          32
 #define SCREEN_HEIGHT         128
 
-/* ── Status canvas buffer size (32×32 px square for in-place 90° rotation) ── */
-#define BUFFER_SIZE           32
+/*
+ * Height of the status bar in pixels (along the vertical OLED length).
+ * Can be modified here or overridden via CONFIG_NICE_OLED_STATUS_BAR_SIZE.
+ * Default: 20 px.
+ */
+#ifndef STATUS_BAR_SIZE
+#ifdef CONFIG_NICE_OLED_STATUS_BAR_SIZE
+#define STATUS_BAR_SIZE       CONFIG_NICE_OLED_STATUS_BAR_SIZE
+#else
+#define STATUS_BAR_SIZE       20
+#endif
+#endif
 
 /* ── LVGL color aliases ───────────────────────────────────────────────────── */
 #define LVGL_BACKGROUND  (IS_ENABLED(CONFIG_NICE_OLED_WIDGET_INVERTED) \
@@ -53,10 +63,16 @@ struct status_state {
 void to_uppercase(char *str);
 
 /**
- * Rotate the 32×32 canvas 90° clockwise so horizontal text/icons
- * appear oriented correctly on the vertically mounted display.
- * @param canvas  The lv_canvas_t object to transform.
- * @param cbuf    The backing pixel buffer for @p canvas.
+ * Prepares the canvas for unrotated horizontal drawing (32 px wide × STATUS_BAR_SIZE tall)
+ * and fills it with background color.
+ */
+void prepare_status_canvas(lv_obj_t *canvas);
+
+/**
+ * Rotates the 32×STATUS_BAR_SIZE unrotated drawing 90° clockwise into @p cbuf
+ * (STATUS_BAR_SIZE×32) and flushes to the canvas.
+ * @param canvas  The lv_canvas_t object.
+ * @param cbuf    The backing pixel buffer for display.
  */
 void rotate_canvas(lv_obj_t *canvas, lv_color_t cbuf[]);
 

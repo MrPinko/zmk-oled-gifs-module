@@ -96,6 +96,8 @@ void draw_left_image(lv_obj_t *parent) {
     widget_left_image_cycle_init();
 #endif
 
-    /* Position: starts at x=32 (under 32×32 status canvas) */
-    lv_obj_align(art, LV_ALIGN_TOP_LEFT, 32, 0);
+    /*
+     * Position: starts at x=0 (fills the space under the TOP_RIGHT status bar).
+     */
+    lv_obj_align(art, LV_ALIGN_TOP_LEFT, 0, 0);
 }

@@ -43,6 +43,21 @@ endchoice
 config LV_Z_MEM_POOL_SIZE
     default 4096 if ZMK_DISPLAY_STATUS_SCREEN_CUSTOM
 
+# ── Status bar configuration ──────────────────────────────────────────────────
+config NICE_OLED_STATUS_BAR_SIZE
+    int "Height of status bar in pixels (along vertical OLED length)"
+    default 20
+    help
+      Height in pixels of the status area (Bluetooth + Battery row) along the
+      vertical length of the OLED. Default is 20 px.
+
+config NICE_OLED_FLIP
+    bool "Flip display layout (places status bar at opposite end)"
+    default n
+    help
+      When enabled, places the status bar at LV_ALIGN_TOP_LEFT instead of
+      LV_ALIGN_TOP_RIGHT. Useful if the display is physically inverted.
+
 # ── Left (central) side animation ────────────────────────────────────────────
 config NICE_LEFT_ANIMATION
     bool "Enable animated GIF on central (left) side OLED"

@@ -2,8 +2,9 @@
  * Copyright (c) 2024 Federico (MrPinko)
  * SPDX-License-Identifier: MIT
  *
- * Peripheral (right) side screen widget: aggregates battery status and
- * BLE peripheral connectivity, plus the right-side animated artwork.
+ * Peripheral (right) side screen widget for 128×32 vertical OLED:
+ *   - Status bar (STATUS_BAR_SIZE × 32 px): [BLE] [Battery] in one row at TOP
+ *   - Artwork area: Image / GIF animation (under status bar)
  */
 
 #pragma once
@@ -15,13 +16,12 @@
 
 /**
  * Internal widget state for the peripheral screen.
- * Only one canvas buffer is used (top status strip only—no profile dots
- * on the peripheral side).
+ * Buffer sized for STATUS_BAR_SIZE × SCREEN_WIDTH.
  */
 struct zmk_widget_screen {
     sys_snode_t  node;
     lv_obj_t    *obj;
-    lv_color_t   cbuf[BUFFER_SIZE * BUFFER_SIZE];  /**< Status strip buffer */
+    lv_color_t   cbuf[STATUS_BAR_SIZE * SCREEN_WIDTH];  /**< Status bar buffer */
     struct status_state state;
 };
 

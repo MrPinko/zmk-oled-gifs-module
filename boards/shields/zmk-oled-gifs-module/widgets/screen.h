@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: MIT
  *
  * Central (left) side screen widget for 128×32 vertical OLED:
- *   - Status canvas (32×32 px rotated): Output (BLE/USB) + Battery
- *   - Artwork area: Image / GIF animation (under status canvas)
+ *   - Status bar (STATUS_BAR_SIZE × 32 px): [BLE] [Battery] in one row at TOP
+ *   - Artwork area: Image / GIF animation (under status bar)
  */
 
 #pragma once
@@ -16,12 +16,12 @@
 
 /**
  * Internal widget state for the central screen.
- * Single canvas buffer: 32×32 px for top status area.
+ * Buffer sized for STATUS_BAR_SIZE × SCREEN_WIDTH.
  */
 struct zmk_widget_screen {
     sys_snode_t   node;
     lv_obj_t     *obj;
-    lv_color_t    cbuf[BUFFER_SIZE * BUFFER_SIZE];   /**< 32×32 px status canvas buffer */
+    lv_color_t    cbuf[STATUS_BAR_SIZE * SCREEN_WIDTH];   /**< Status bar buffer */
     struct status_state state;
 };
 

@@ -42,7 +42,8 @@ static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
  */
 static void draw_top(lv_obj_t *widget, lv_color_t cbuf[], const struct status_state *state) {
     lv_obj_t *canvas = lv_obj_get_child(widget, 0);
-    fill_background(canvas);
+
+    prepare_status_canvas(canvas);
 
     draw_output_status(canvas, state);
     draw_battery_status(canvas, state);
@@ -128,16 +129,19 @@ ZMK_SUBSCRIPTION(widget_output_status, zmk_ble_active_profile_changed);
 
 int zmk_widget_screen_init(struct zmk_widget_screen *widget, lv_obj_t *parent) {
     widget->obj = lv_obj_create(parent);
-    /* Resolution: 128 px long × 32 px wide */
+    /* Resolution: SCREEN_HEIGHT (128) px long × SCREEN_WIDTH (32) px wide */
     lv_obj_set_size(widget->obj, SCREEN_HEIGHT, SCREEN_WIDTH);
 
-    /* Top status canvas (32×32 px: battery + output) at x=0 */
-    lv_obj_t *top = lv_canvas_create(widget->obj);
+    /* Status bar canvas placed at physical top of OLED */
+#if IS_ENABLED(CONFIG_NICE_OLED_FLIP)
     lv_obj_align(top, LV_ALIGN_TOP_LEFT, 0, 0);
-    lv_canvas_set_buffer(top, widget->cbuf, BUFFER_SIZE, BUFFER_SIZE,
+#else
+    lv_obj_align(top, LV_ALIGN_TOP_RIGHT, 0, 0);
+#endif
+    lv_canvas_set_buffer(top, widget->cbuf, STATUS_BAR_SIZE, SCREEN_WIDTH,
                          LV_IMG_CF_TRUE_COLOR);
 
-    /* Artwork / GIF animation starts at x=32 (under status canvas) */
+    /* Artwork / GIF animation starts immediately below the status bar */
     draw_left_image(widget->obj);
 
     /* Register this widget instance and start the event-driven listeners. */
