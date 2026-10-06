@@ -117,16 +117,16 @@ int zmk_widget_screen_init(struct zmk_widget_screen *widget, lv_obj_t *parent) {
     widget->obj = lv_obj_create(parent);
     /* Resolution: 128 px long × 32 px wide */
     lv_obj_set_size(widget->obj, SCREEN_HEIGHT, SCREEN_WIDTH);
-    lv_obj_align(widget->obj, NULL, LV_ALIGN_TOP_LEFT, 0, 0);
+    lv_obj_align(widget->obj, LV_ALIGN_TOP_LEFT, 0, 0);
 
     /* Status bar canvas placed at physical top of OLED */
     lv_obj_t *top = lv_canvas_create(widget->obj);
     lv_canvas_set_buffer(top, widget->cbuf, STATUS_BAR_SIZE, SCREEN_WIDTH,
                          LV_IMG_CF_TRUE_COLOR);
 #if IS_ENABLED(CONFIG_NICE_OLED_FLIP)
-    lv_obj_align(top, NULL, LV_ALIGN_TOP_LEFT, 0, 0);
+    lv_obj_align(top, LV_ALIGN_TOP_LEFT, 0, 0);
 #else
-    lv_obj_align(top, NULL, LV_ALIGN_TOP_RIGHT, 0, 0);
+    lv_obj_align(top, LV_ALIGN_TOP_RIGHT, 0, 0);
 #endif
 
     /* Artwork / GIF animation starts under status canvas */

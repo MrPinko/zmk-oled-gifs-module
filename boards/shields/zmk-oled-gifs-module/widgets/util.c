@@ -35,9 +35,9 @@ void rotate_canvas(lv_obj_t *canvas, lv_color_t cbuf[]) {
     }
     lv_canvas_set_buffer(canvas, cbuf, STATUS_BAR_SIZE, SCREEN_WIDTH, LV_IMG_CF_TRUE_COLOR);
 #if IS_ENABLED(CONFIG_NICE_OLED_FLIP)
-    lv_obj_align(canvas, NULL, LV_ALIGN_TOP_LEFT, 0, 0);
+    lv_obj_align(canvas, LV_ALIGN_TOP_LEFT, 0, 0);
 #else
-    lv_obj_align(canvas, NULL, LV_ALIGN_TOP_RIGHT, 0, 0);
+    lv_obj_align(canvas, LV_ALIGN_TOP_RIGHT, 0, 0);
 #endif
 }
 
