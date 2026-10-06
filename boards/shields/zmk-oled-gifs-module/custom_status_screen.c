@@ -21,6 +21,7 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 /* Include font data (defines pixel_operator_mono lv_font_t). */
 #include "assets/pixel_operator_mono.c"
+#include "assets/pixel_operator_mono_8.c"
 
 #if IS_ENABLED(CONFIG_NICE_OLED_WIDGET_STATUS)
 static struct zmk_widget_screen screen_widget;
