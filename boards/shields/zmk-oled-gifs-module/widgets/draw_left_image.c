@@ -29,32 +29,81 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 /* ── Image & frame declarations ──────────────────────────────────────────── */
 
-LV_IMG_DECLARE(left_image);
+// LV_IMG_DECLARE(left_image);
 /* Add more image declarations here:
  * LV_IMG_DECLARE(left_image_2);
  * LV_IMG_DECLARE(left_image_3);
  */
 
 /* List of images to cycle through when cycle combo is pressed */
-static const lv_img_dsc_t *left_cycle_images[] = {
-    &left_image,
-    /* Add additional images to cycle through here:
-     * &left_image_2,
-     * &left_image_3,
-     */
-};
+// static const lv_img_dsc_t *left_cycle_images[] = {
+//     &left_image,
+//     /* Add additional images to cycle through here:
+//      * &left_image_2,
+//      * &left_image_3,
+//      */
+// };
 
-#define LEFT_CYCLE_COUNT (sizeof(left_cycle_images) / sizeof(left_cycle_images[0]))
+// #define LEFT_CYCLE_COUNT (sizeof(left_cycle_images) / sizeof(left_cycle_images[0]))
 
 /* Animation frame list (used when CONFIG_NICE_LEFT_ANIMATION=y) */
-#define LEFT_ANIM_FRAME_COUNT 2
+// #define LEFT_ANIM_FRAME_COUNT 2
 
-static const lv_img_dsc_t *anim_imgs[LEFT_ANIM_FRAME_COUNT] = {
-    &left_image,
+// static const lv_img_dsc_t *anim_imgs[LEFT_ANIM_FRAME_COUNT] = {
+//     &left_image,
+// };
+
+struct left_playlist_entry {
+    const lv_img_dsc_t *const *frames;
+    uint8_t frame_count;
+    uint32_t duration_ms;
+};
+LV_IMG_DECLARE(left_image);
+LV_IMG_DECLARE(crystal_01);
+LV_IMG_DECLARE(crystal_02);
+LV_IMG_DECLARE(crystal_03);
+
+
+static const lv_img_dsc_t *const left_image_frames[] = { &left_image };
+
+static const lv_img_dsc_t *const crystal_frames[] = {
+    &crystal_01, &crystal_02, &crystal_03
 };
 
+static const struct left_cycle_entry left_playlist[] = {
+    { skull_frames,    COUNT(skull_frames),    0     },
+    { crystal_frames, COUNT(crystal_frames), 2400  },
+};
+#define LEFT_CYCLE_COUNT ARRAY_SIZE(left_playlist)
+
+static lv_obj_t *left_art_parent;
 static lv_obj_t *left_art_obj = NULL;
 static int left_current_image_idx = 0;
+
+
+static void show_current_entry(void) {
+    const struct left_playlist_entry *entry =
+        &left_playlist[left_current_image_idx];
+
+    if (left_art_obj != NULL) {
+        lv_obj_del(left_art_obj);
+        left_art_obj = NULL;
+    }
+
+    if (entry->frame_count == 1) {
+        left_art_obj = lv_img_create(left_art_parent);
+        lv_img_set_src(left_art_obj, entry->frames[0]);
+    } else {
+        left_art_obj = lv_animimg_create(left_art_parent);
+        lv_animimg_set_src(left_art_obj, (const void **)entry->frames,
+                           entry->frame_count);
+        lv_animimg_set_duration(left_art_obj, entry->duration_ms);
+        lv_animimg_set_repeat_count(left_art_obj, LV_ANIM_REPEAT_INFINITE);
+        lv_animimg_start(left_art_obj);
+    }
+
+    lv_obj_align(left_art_obj, LV_ALIGN_TOP_LEFT, 0, 0);
+}
 
 /* ── Cycle event listener ────────────────────────────────────────────────── */
 
@@ -64,7 +113,10 @@ static void cycle_image_update_cb(struct zmk_oled_cycle_event ev) {
     }
     left_current_image_idx = (left_current_image_idx + 1) % LEFT_CYCLE_COUNT;
     LOG_INF("Cycling left OLED image to index %d", left_current_image_idx);
-    lv_img_set_src(left_art_obj, left_cycle_images[left_current_image_idx]);
+
+    show_current_entry();
+
+    // lv_img_set_src(left_art_obj, left_cycle_images[left_current_image_idx]);
 }
 
 static struct zmk_oled_cycle_event cycle_image_get_state(const zmk_event_t *eh) {
@@ -78,26 +130,9 @@ ZMK_SUBSCRIPTION(widget_left_image_cycle, zmk_oled_cycle_event);
 /* ── Public API ──────────────────────────────────────────────────────────── */
 
 void draw_left_image(lv_obj_t *parent) {
-#if IS_ENABLED(CONFIG_NICE_LEFT_ANIMATION)
-    /* Animated mode: loop all frames in anim_imgs[] */
-    lv_obj_t *art = lv_animimg_create(parent);
 
-    lv_animimg_set_src(art, (const void **)anim_imgs, LEFT_ANIM_FRAME_COUNT);
-    lv_animimg_set_duration(art, CONFIG_NICE_LEFT_ANIMATION_MS);
-    lv_animimg_set_repeat_count(art, LV_ANIM_REPEAT_INFINITE);
-    lv_animimg_start(art);
-    left_art_obj = art;
-#else
-    /* Static mode: display the current image from left_cycle_images[] */
-    lv_obj_t *art = lv_img_create(parent);
-    lv_img_set_src(art, left_cycle_images[left_current_image_idx]);
-    left_art_obj = art;
-
+        left_art_parent = parent;
+    show_current_entry();
     widget_left_image_cycle_init();
-#endif
 
-    /*
-     * Position: starts at x=0 (fills the space under the TOP_RIGHT status bar).
-     */
-    lv_obj_align(art, LV_ALIGN_TOP_LEFT, 0, 0);
 }
