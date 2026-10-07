@@ -29,71 +29,28 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 /* ── Image & frame declarations ──────────────────────────────────────────── */
 
-// LV_IMG_DECLARE(left_image);
-/* Add more image declarations here:
- * LV_IMG_DECLARE(left_image_2);
- * LV_IMG_DECLARE(left_image_3);
- */
-
-/* List of images to cycle through when cycle combo is pressed */
-// static const lv_img_dsc_t *left_cycle_images[] = {
-//     &left_image,
-//     /* Add additional images to cycle through here:
-//      * &left_image_2,
-//      * &left_image_3,
-//      */
-// };
-
-// #define LEFT_CYCLE_COUNT (sizeof(left_cycle_images) / sizeof(left_cycle_images[0]))
-
-/* Animation frame list (used when CONFIG_NICE_LEFT_ANIMATION=y) */
-// #define LEFT_ANIM_FRAME_COUNT 2
-
-// static const lv_img_dsc_t *anim_imgs[LEFT_ANIM_FRAME_COUNT] = {
-//     &left_image,
-// };
-
-struct left_playlist_entry {
-    const lv_img_dsc_t *const *frames;
-    uint8_t frame_count;
-    uint32_t duration_ms;
-};
-LV_IMG_DECLARE(left_image);
-LV_IMG_DECLARE(crystal_01);
-LV_IMG_DECLARE(crystal_02);
-LV_IMG_DECLARE(crystal_03);
-
-
-static const lv_img_dsc_t *const left_image_frames[] = { &left_image };
-
-static const lv_img_dsc_t *const crystal_frames[] = {
-    &crystal_01, &crystal_02, &crystal_03
-};
-
-static const struct left_playlist_entry left_playlist[] = {
-    { left_image_frames,    ARRAY_SIZE(left_image_frames),    0     },
-    { crystal_frames, ARRAY_SIZE(crystal_frames), 2400  },
-};
-#define LEFT_CYCLE_COUNT ARRAY_SIZE(left_playlist)
-
 static lv_obj_t *left_art_parent;
 static lv_obj_t *left_art_obj = NULL;
 static int left_current_image_idx = 0;
 
-
-static void show_current_entry(void) {
+static void show_current_entry(void)
+{
     const struct left_playlist_entry *entry =
         &left_playlist[left_current_image_idx];
 
-    if (left_art_obj != NULL) {
+    if (left_art_obj != NULL)
+    {
         lv_obj_del(left_art_obj);
         left_art_obj = NULL;
     }
 
-    if (entry->frame_count == 1) {
+    if (entry->frame_count == 1)
+    {
         left_art_obj = lv_img_create(left_art_parent);
         lv_img_set_src(left_art_obj, entry->frames[0]);
-    } else {
+    }
+    else
+    {
         left_art_obj = lv_animimg_create(left_art_parent);
         lv_animimg_set_src(left_art_obj, (const void **)entry->frames,
                            entry->frame_count);
@@ -107,8 +64,10 @@ static void show_current_entry(void) {
 
 /* ── Cycle event listener ────────────────────────────────────────────────── */
 
-static void cycle_image_update_cb(struct zmk_oled_cycle_event ev) {
-    if (!left_art_obj || LEFT_CYCLE_COUNT <= 1) {
+static void cycle_image_update_cb(struct zmk_oled_cycle_event ev)
+{
+    if (!left_art_obj || LEFT_CYCLE_COUNT <= 1)
+    {
         return;
     }
     left_current_image_idx = (left_current_image_idx + 1) % LEFT_CYCLE_COUNT;
@@ -119,7 +78,8 @@ static void cycle_image_update_cb(struct zmk_oled_cycle_event ev) {
     // lv_img_set_src(left_art_obj, left_cycle_images[left_current_image_idx]);
 }
 
-static struct zmk_oled_cycle_event cycle_image_get_state(const zmk_event_t *eh) {
+static struct zmk_oled_cycle_event cycle_image_get_state(const zmk_event_t *eh)
+{
     return (struct zmk_oled_cycle_event){};
 }
 
@@ -129,10 +89,10 @@ ZMK_SUBSCRIPTION(widget_left_image_cycle, zmk_oled_cycle_event);
 
 /* ── Public API ──────────────────────────────────────────────────────────── */
 
-void draw_left_image(lv_obj_t *parent) {
+void draw_left_image(lv_obj_t *parent)
+{
 
-        left_art_parent = parent;
+    left_art_parent = parent;
     show_current_entry();
     widget_left_image_cycle_init();
-
 }
