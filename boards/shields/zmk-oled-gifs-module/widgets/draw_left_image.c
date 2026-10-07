@@ -70,7 +70,7 @@ static const lv_img_dsc_t *const crystal_frames[] = {
     &crystal_01, &crystal_02, &crystal_03
 };
 
-static const struct left_cycle_entry left_playlist[] = {
+static const struct left_playlist_entry left_playlist[] = {
     { skull_frames,    COUNT(skull_frames),    0     },
     { crystal_frames, COUNT(crystal_frames), 2400  },
 };
