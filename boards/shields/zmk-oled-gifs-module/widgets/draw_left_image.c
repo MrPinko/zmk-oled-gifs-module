@@ -71,8 +71,8 @@ static const lv_img_dsc_t *const crystal_frames[] = {
 };
 
 static const struct left_playlist_entry left_playlist[] = {
-    { left_image_frames,    COUNT(left_image_frames),    0     },
-    { crystal_frames, COUNT(crystal_frames), 2400  },
+    { left_image_frames,    ARRAY_SIZE(left_image_frames),    0     },
+    { crystal_frames, ARRAY_SIZE(crystal_frames), 2400  },
 };
 #define LEFT_CYCLE_COUNT ARRAY_SIZE(left_playlist)
 
