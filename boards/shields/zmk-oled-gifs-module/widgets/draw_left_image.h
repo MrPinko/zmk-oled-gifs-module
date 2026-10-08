@@ -45,14 +45,17 @@ LV_IMG_DECLARE(left_image);
 LV_IMG_DECLARE(crystal_01);
 LV_IMG_DECLARE(crystal_02);
 LV_IMG_DECLARE(crystal_03);
+LV_IMG_DECLARE(remove_after);
 
 static const lv_img_dsc_t *const left_image_frames[] = {&left_image};
+static const lv_img_dsc_t *const remove_after_image_frames[] = {&remove_after};
 
 static const lv_img_dsc_t *const crystal_frames[] = {
     &crystal_01, &crystal_02, &crystal_03};
 
 static const struct left_playlist_entry left_playlist[] = {
     {left_image_frames, ARRAY_SIZE(left_image_frames), 0},
+    {remove_after_image_frames, ARRAY_SIZE(remove_after_image_frames), 0},
     {crystal_frames, ARRAY_SIZE(crystal_frames), 2400},
 };
 #define LEFT_CYCLE_COUNT ARRAY_SIZE(left_playlist)
